@@ -10,6 +10,7 @@ BASE_URL = 'https://api.bls.gov/publicAPI/v2/timeseries/data/'
 SERIES_IDS = ['CES0000000001', 'LNS14000000', 'LNS11000000', 'LNS12000000', 'LNS13000000']
 DATA_FILE = 'dataset.csv'
 
+# Data fetching for different Series, up to 5 years from the API
 def fetch_data(series_id):
     headers = {'Content-type': 'application/json'}
     data = json.dumps({
@@ -22,7 +23,9 @@ def fetch_data(series_id):
     response.raise_for_status()
     return response.json()
 
+# Process and Structure the response from the API
 def parse_data(response, series_id):
+    # Data points initialization
     data_points = []
     for series in response['Results']['series']:
         if series['seriesID'] == series_id:
@@ -34,6 +37,7 @@ def parse_data(response, series_id):
                 })
     return data_points
 
+# Saving Data do CSV File
 def save_data_to_csv(data):
     df = pd.DataFrame(data)
     if not os.path.exists(DATA_FILE):

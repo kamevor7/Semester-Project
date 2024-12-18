@@ -28,18 +28,21 @@ data = load_data()
 # Setting Sidebar Filters
 st.sidebar.title("Filters")
 
+# Series selection
 selected_series = st.sidebar.multiselect(
     "Select Data Series",
     options=data['series_id'].unique(),
     default=[DEFAULT_SERIES]
 )
 
+# Years filtering
 selected_years = st.sidebar.multiselect(
     "Select Year(s)",
     options=data['year'].unique(),
     default=[DEFAULT_YEAR]
 )
 
+# Different plotting option
 plot_type = st.sidebar.selectbox(
     "Select Plot Type",
     options=["Line Chart", "Bar Chart", "Scatter Plot"],
