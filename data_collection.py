@@ -22,7 +22,7 @@ def fetch_data(series_id):
     response.raise_for_status()
     return response.json()
 
-def parse_bls_data(response, series_id):
+def parse_data(response, series_id):
     data_points = []
     for series in response['Results']['series']:
         if series['seriesID'] == series_id:
@@ -47,6 +47,6 @@ if __name__ == "__main__":
     all_data = []
     for series_id in SERIES_IDS:
         response = fetch_data(series_id)
-        all_data.extend(parse_bls_data(response, series_id))
+        all_data.extend(parse_data(response, series_id))
     save_data_to_csv(all_data)
     print("Data updated successfully.")
