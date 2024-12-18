@@ -1,3 +1,5 @@
+from operator import index
+
 import streamlit as st
 import pandas as pd
 import altair as alt
@@ -15,7 +17,7 @@ DEFAULT_SERIES = 'CES0000000001'
 DEFAULT_COLOR_THEME = 'Light'
 
 # Data loading phase
-@st.cache
+@st.cache_data
 def load_data():
     df = pd.read_csv(DATA_FILE)
     df['date'] = pd.to_datetime(df['date'])
@@ -41,7 +43,8 @@ selected_years = st.sidebar.multiselect(
 
 plot_type = st.sidebar.selectbox(
     "Select Plot Type",
-    options=["Line Chart", "Bar Chart", "Scatter Plot"]
+    options=["Line Chart", "Bar Chart", "Scatter Plot"],
+    index=2
 )
 
 # Option for Color Them Selection
@@ -52,45 +55,45 @@ color_theme = st.sidebar.radio(
 )
 
 
+# Apply Color Theme
 def apply_theme(theme):
     if theme == "Light":
-        st.markdown(
-            """
-            <style>
-            .main { background-color: #ffffff; color: #000000; }
-            </style>
-            """,
-            unsafe_allow_html=True,
-        )
+        theme_css = """
+            background-color: #ffffff;
+            color: #000000;
+        """
     elif theme == "Dark":
-        st.markdown(
-            """
-            <style>
-            .main { background-color: #333333; color: #ffffff; }
-            </style>
-            """,
-            unsafe_allow_html=True,
-        )
+        theme_css = """
+            background-color: #333333;
+            color: #ffffff;
+        """
     elif theme == "Blue":
-        st.markdown(
-            """
-            <style>
-            .main { background-color: #e6f7ff; color: #003366; }
-            </style>
-            """,
-            unsafe_allow_html=True,
-        )
+        theme_css = """
+            background-color: #e6f7ff;
+            color: #003366;
+        """
     elif theme == "Green":
-        st.markdown(
-            """
-            <style>
-            .main { background-color: #e6ffe6; color: #003300; }
-            </style>
-            """,
-            unsafe_allow_html=True,
-        )
+        theme_css = """
+            background-color: #e6ffe6;
+            color: #003300;
+        """
+
+    # Inject custom styles
+    st.markdown(
+        f"""
+        <style>
+        .custom-container {{
+            {theme_css}
+        }}
+        </style>
+        <div class="custom-container">
+        """,
+        unsafe_allow_html=True,
+    )
+
 
 apply_theme(color_theme)
+
 
 # Running Dashboard Code
 st.title("US Labor Statistics Dashboard")
@@ -134,3 +137,6 @@ else:
 # Display Filtered Data
 st.subheader("Filtered Data Table")
 st.dataframe(filtered_data)
+
+
+st.markdown("</div>", unsafe_allow_html=True)
