@@ -63,25 +63,25 @@ filtered_data = data[
 if not filtered_data.empty:
     if plot_type == "Line Chart":
         chart = alt.Chart(filtered_data).mark_line().encode(
-            x='Month:T',
+            x='date:T',
             y='value:Q',
             color='series_id:N',
-            tooltip=['series_id', 'Month:T', 'value:Q']
+            tooltip=['series_id', 'date:T', 'value:Q']
         )
     elif plot_type == "Bar Chart":
         chart = alt.Chart(filtered_data).mark_bar().encode(
-            x='Month:T',
+            x='date:T',
             y='value:Q',
             color='series_id:N',
-            tooltip=['series_id', 'Month:T', 'value:Q']
+            tooltip=['series_id', 'date:T', 'value:Q']
         )
     elif plot_type == "Scatter Plot":
         chart = alt.Chart(filtered_data).mark_circle().encode(
-            x='Month:T',
+            x='date:T',
             y='value:Q',
             color='series_id:N',
             size='value:Q',
-            tooltip=['series_id', 'Month:T', 'value:Q']
+            tooltip=['series_id', 'date:T', 'value:Q']
         )
 
     st.altair_chart(chart.properties(width=800, height=400), use_container_width=True)
