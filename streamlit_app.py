@@ -13,8 +13,6 @@ DATA_FILE = 'dataset.csv'
 DEFAULT_YEAR = datetime.now().year
 # Default series 'CES0000000001' is for Total non-farmers workers
 DEFAULT_SERIES = 'CES0000000001'
-# Default color theme, as user will be able to change color them
-DEFAULT_COLOR_THEME = 'Light'
 
 # Data loading phase
 @st.cache_data
@@ -49,7 +47,7 @@ plot_type = st.sidebar.selectbox(
 
 # Running Dashboard Code
 st.title("US Labor Statistics Dashboard")
-st.write("Visualize and explore labor statistics data.")
+st.write("Data Visualization")
 
 # Data Filter
 filtered_data = data[
