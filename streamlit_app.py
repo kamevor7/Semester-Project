@@ -47,13 +47,6 @@ plot_type = st.sidebar.selectbox(
     index=2
 )
 
-# Option for Color Them Selection
-color_theme = st.sidebar.radio(
-    "Select Dashboard Theme",
-    options=["Light", "Dark", "Blue", "Green"],
-    index=["Light", "Dark", "Blue", "Green"].index(DEFAULT_COLOR_THEME)
-)
-
 # Running Dashboard Code
 st.title("US Labor Statistics Dashboard")
 st.write("Visualize and explore labor statistics data.")
