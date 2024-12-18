@@ -14,7 +14,7 @@ def fetch_data(series_id):
     headers = {'Content-type': 'application/json'}
     data = json.dumps({
         "seriesid": [series_id],
-        "startyear": str(datetime.now().year - 1),
+        "startyear": str(datetime.now().year - 5),
         "endyear": str(datetime.now().year),
         "registrationkey": API_KEY
     })
