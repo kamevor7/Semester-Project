@@ -14,14 +14,6 @@ DEFAULT_YEAR = datetime.now().year
 # Default series 'CES0000000001' is for Total Nonfarm Employment
 DEFAULT_SERIES = 'CES0000000001'
 
-# Series name Update for better visualization
-SERIES_NAMES = {
-    "CES0000000001": "Total Nonfarm Employment",
-    "LNS14000000": "Unemployment Rate",
-    "LNS11000000": "Civilian Labor Force",
-    "LNS12000000": "Civilian Employment",
-    "LNS13000000": "Civilian Unemployment"
-}
 
 # Data loading phase
 @st.cache_data
@@ -29,7 +21,6 @@ def load_data():
     df = pd.read_csv(DATA_FILE)
     df['date'] = pd.to_datetime(df['date'])
     df['year'] = df['date'].dt.year
-    df['month'] = df['date'].dt.month
     return df
 
 data = load_data()
@@ -37,13 +28,9 @@ data = load_data()
 # Setting Sidebar Filters
 st.sidebar.title("Filters")
 
-# Update series names for filtering
-series_display_names = {v: k for k, v in SERIES_NAMES.items()}
-
-# Filtering Series
 selected_series = st.sidebar.multiselect(
-    options=list(SERIES_NAMES.keys()),
-    format_func=lambda x: SERIES_NAMES[x],
+    "Select Data Series",
+    options=data['series_id'].unique(),
     default=[DEFAULT_SERIES]
 )
 
