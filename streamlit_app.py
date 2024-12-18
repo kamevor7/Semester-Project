@@ -54,47 +54,6 @@ color_theme = st.sidebar.radio(
     index=["Light", "Dark", "Blue", "Green"].index(DEFAULT_COLOR_THEME)
 )
 
-
-# Apply Color Theme
-def apply_theme(theme):
-    if theme == "Light":
-        theme_css = """
-            background-color: #ffffff;
-            color: #000000;
-        """
-    elif theme == "Dark":
-        theme_css = """
-            background-color: #333333;
-            color: #ffffff;
-        """
-    elif theme == "Blue":
-        theme_css = """
-            background-color: #e6f7ff;
-            color: #003366;
-        """
-    elif theme == "Green":
-        theme_css = """
-            background-color: #e6ffe6;
-            color: #003300;
-        """
-
-    # Inject custom styles
-    st.markdown(
-        f"""
-        <style>
-        .custom-container {{
-            {theme_css}
-        }}
-        </style>
-        <div class="custom-container">
-        """,
-        unsafe_allow_html=True,
-    )
-
-
-apply_theme(color_theme)
-
-
 # Running Dashboard Code
 st.title("US Labor Statistics Dashboard")
 st.write("Visualize and explore labor statistics data.")
@@ -133,10 +92,3 @@ if not filtered_data.empty:
     st.altair_chart(chart.properties(width=800, height=400), use_container_width=True)
 else:
     st.warning("No data available for the selected filters.")
-
-# Display Filtered Data
-st.subheader("Filtered Data Table")
-st.dataframe(filtered_data)
-
-
-st.markdown("</div>", unsafe_allow_html=True)
