@@ -47,49 +47,27 @@ selected_series = st.sidebar.multiselect(
     default=[DEFAULT_SERIES]
 )
 
-# filtering by Year
 selected_years = st.sidebar.multiselect(
+    "Select Year(s)",
     options=data['year'].unique(),
     default=[DEFAULT_YEAR]
 )
 
-# Selecting different plotting
 plot_type = st.sidebar.selectbox(
+    "Select Plot Type",
     options=["Line Chart", "Bar Chart", "Scatter Plot"],
     index=2
 )
 
-# Temporal Analysis
-st.sidebar.title("Temporal Analysis")
+# Running Dashboard Code
+st.title("US Labor Statistics Dashboard")
+st.write("Data Visualization")
 
-temporal_aggregation = st.sidebar.radio(
-    options=["Monthly", "Yearly", "Quarterly"],
-    index=0
-)
-
-show_trendline = st.sidebar.checkbox("Add Trendline", value=False)
-
-# Filter Data
+# Data Filter
 filtered_data = data[
     (data['series_id'].isin(selected_series)) &
     (data['year'].isin(selected_years))
 ]
-
-# Temporal Aggregation
-def aggregate_data(df, aggregation):
-    if aggregation == "Monthly":
-        return df.groupby(['year', 'month', 'series_id'])['value'].mean().reset_index()
-    elif aggregation == "Yearly":
-        return df.groupby(['year', 'series_id'])['value'].mean().reset_index()
-    elif aggregation == "Quarterly":
-        df['quarter'] = df['date'].dt.quarter
-        return df.groupby(['year', 'quarter', 'series_id'])['value'].mean().reset_index()
-
-aggregated_data = aggregate_data(filtered_data, temporal_aggregation)
-
-# Running Dashboard Code
-st.title("US Labor Statistics Dashboard")
-st.write("Data Visualization")
 
 # Plotting: Line Chart, Bar Chart, Scatter Plot
 if not filtered_data.empty:
@@ -119,25 +97,3 @@ if not filtered_data.empty:
     st.altair_chart(chart.properties(width=800, height=400), use_container_width=True)
 else:
     st.warning("No data available for the selected filters.")
-
-
-# Temporal Analysis Section
-st.subheader(f"Temporal Analysis: {temporal_aggregation}")
-if not aggregated_data.empty:
-    temporal_chart = alt.Chart(aggregated_data).mark_line().encode(
-        x=alt.X('month:O' if temporal_aggregation == 'Monthly' else 'year:O', title="Time Period"),
-        y='value:Q',
-        color='series_id:N',
-        tooltip=['series_id', 'value:Q', 'year:O']
-    )
-
-    # Add Trendline if selected
-    if show_trendline:
-        temporal_chart = temporal_chart + alt.Chart(aggregated_data).transform_loess(
-            'month' if temporal_aggregation == 'Monthly' else 'year',
-            'value'
-        ).mark_line(color='red', size=2)
-
-    st.altair_chart(temporal_chart.properties(width=800, height=400), use_container_width=True)
-else:
-    st.warning("No aggregated data available.")
